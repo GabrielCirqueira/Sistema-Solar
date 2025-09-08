@@ -23,7 +23,6 @@ export default function EarthMoon() {
 
     return (
         <group>
-            {/* Terra */}
             <mesh ref={earthRef} castShadow receiveShadow>
                 <sphereGeometry args={[1.5, 64, 64]} />
                 <meshStandardMaterial
@@ -33,7 +32,6 @@ export default function EarthMoon() {
                 />
             </mesh>
 
-            {/* Lua */}
             <group ref={moonGroupRef}>
                 <mesh position={[3, 0, 0]} castShadow receiveShadow>
                     <sphereGeometry args={[0.4, 32, 32]} />

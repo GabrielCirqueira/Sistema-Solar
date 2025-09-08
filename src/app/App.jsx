@@ -2,8 +2,8 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, Bounds } from "@react-three/drei";
 import { Suspense, useRef, useEffect } from "react";
 import * as THREE from "three";
-import EarthMoon from "./EarthMoon.jsx";
-import Sun from "./Sun.jsx";
+import EarthMoon from "@/components/three/EarthMoon.jsx";
+import Sun from "@/components/three/Sun.jsx";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 export default function App() {
