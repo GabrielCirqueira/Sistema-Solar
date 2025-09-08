@@ -1,49 +1,57 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars, Bounds } from "@react-three/drei";
+import { OrbitControls, Stars } from "@react-three/drei";
 import { Suspense, useRef, useEffect } from "react";
 import * as THREE from "three";
-import EarthMoon from "@/components/three/EarthMoon.jsx";
-import Sun from "@/components/three/Sun.jsx";
+import TerraLua from "@src/components/three/TerraLua.jsx";
+import Marte from "@src/components/three/Marte.jsx";
+import Sol from "@src/components/three/Sol.jsx";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { camera, exibicao, luzAmbiente, estrelas, posProcessamento } from "@src/configuracoes/config";
 
 export default function App() {
-  const controlsRef = useRef(null);
+  const referenciaControles = useRef(null);
+  const referenciaTerra = useRef(null);
+  const referenciaMarte = useRef(null);
 
   useEffect(() => {
-    controlsRef.current?.target.set(0, 0, 0);
-    controlsRef.current?.update();
+    referenciaControles.current?.target.set(0, 0, 0);
+    referenciaControles.current?.update();
   }, []);
 
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 1.8, 8], fov: 60, near: 0.1, far: 4000 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true }}
+      camera={{ position: camera.posicao, fov: camera.campoDeVisao, near: camera.planoProximo, far: camera.planoDistante }}
+      dpr={exibicao.densidadePixels}
+      gl={{ antialias: exibicao.antiSerrilhado }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.outputColorSpace = THREE.SRGBColorSpace;
-        gl.toneMappingExposure = 1.35;
+        gl.toneMappingExposure = exibicao.exposicaoTomAces;
       }}
       style={{ width: "100vw", height: "100vh" }}
     >
-      <color attach="background" args={["black"]} />
-      <ambientLight intensity={0.2} />
+      <color attach="background" args={[exibicao.corFundo]} />
+      <ambientLight intensity={luzAmbiente.intensidade} />
 
-      <OrbitControls ref={controlsRef} makeDefault enableDamping />
+      <OrbitControls ref={referenciaControles} makeDefault enableDamping />
 
-      <Stars radius={140} depth={80} count={6000} factor={4} saturation={0} fade />
+      <Stars radius={estrelas.raio} depth={estrelas.profundidade} count={estrelas.quantidade} factor={estrelas.fator} saturation={estrelas.saturacao} fade={estrelas.esmaecer} />
 
-      <Sun position={[40, 20, 200]} intensity={10} />
+      <Sol referenciaAlvo={referenciaTerra} />
 
       <Suspense fallback={null}>
-        <Bounds fit clip observe margin={1.2}>
-          <EarthMoon />
-        </Bounds>
+        <TerraLua ref={referenciaTerra} />
+        <Marte ref={referenciaMarte} />
       </Suspense>
 
       <EffectComposer>
-        <Bloom mipmapBlur intensity={0.85} luminanceThreshold={0.6} luminanceSmoothing={0.2} />
+        <Bloom
+          mipmapBlur
+          intensity={posProcessamento.bloom.intensidade}
+          luminanceThreshold={posProcessamento.bloom.limiarLuminancia}
+          luminanceSmoothing={posProcessamento.bloom.suavizacaoLuminancia}
+        />
       </EffectComposer>
     </Canvas>
   );

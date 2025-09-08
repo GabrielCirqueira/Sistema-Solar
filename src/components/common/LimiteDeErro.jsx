@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-export default class ErrorBoundary extends Component {
+export default class LimiteDeErro extends Component {
   constructor(props) {
     super(props)
     this.state = { hasError: false }
@@ -11,7 +11,7 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.error('ErrorBoundary caught:', error, info)
+    console.error('LimiteDeErro capturado:', error, info)
   }
 
   render() {

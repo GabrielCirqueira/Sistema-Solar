@@ -37,6 +37,32 @@ h1 {
   line-height: 1.1;
 }
 
+/* Painel de controles sobreposto */
+.controls-panel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  width: 260px;
+  font-size: 14px;
+  backdrop-filter: blur(4px);
+}
+.controls-panel h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+.controls-panel label {
+  display: block;
+  margin: 8px 0;
+}
+.controls-panel input[type="range"] {
+  width: 100%;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
