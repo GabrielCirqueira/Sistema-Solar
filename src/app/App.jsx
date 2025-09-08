@@ -38,7 +38,14 @@ export default function App() {
       <OrbitControls ref={referenciaControles} makeDefault enableDamping />
 
       <FundoEstrelado />
-      <Stars radius={estrelas.raio} depth={estrelas.profundidade} count={estrelas.quantidade} factor={estrelas.fator} saturation={estrelas.saturacao} fade={estrelas.esmaecer} />
+      <Stars
+        radius={estrelas.raio}
+        depth={estrelas.profundidade}
+        count={estrelas.quantidade}
+        factor={estrelas.fator}
+        saturation={estrelas.saturacao}
+        fade={estrelas.esmaecer}
+      />
 
       <Sol referenciaAlvo={referenciaTerra} />
 
