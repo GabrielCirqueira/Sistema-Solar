@@ -151,18 +151,18 @@ export const fundoEstrelado: ConfigFundoEstrelado = {
 }
 
 export const fundoEstreladoBrilhantes: ConfigFundoEstreladoBrilhantes = {
-  quantidade: 20,
-  escalas: [1.0, 2.0, 9.0],
+  quantidade: 30,
+  escalas: [0.2, 2.0, 9.0],
   opacidades: [231.0, 10.5, 10.28],
 }
 
 export const sol: ConfigSol = {
   posicao: [0, 0, 0],
-  intensidade: 7,
-  haloEscalas: [4, 7, 11],
-  haloOpacidades: [41.0, 10.5, 20.28],
-  corNucleo: '#ffd59a',
-  corHalo: '#ffca7bff',
+  intensidade: 7.5,
+  haloEscalas: [3, 5, 7],
+  haloOpacidades: [1.0, 20.5, 30.28],
+  corNucleo: '#f0af4eff',
+  corHalo: '#f0af4eff',
   sombras: {
     larguraMapa: 2048,
     alturaMapa: 2048,
@@ -177,14 +177,14 @@ export const sol: ConfigSol = {
 }
 
 export const terraLua: ConfigTerraLua = {
-  raioOrbita: 30,
+  raioOrbita: 40,
   velocidadeOrbita: 0.0004,
   velocidadeRotacaoTerra: 0.003,
   distanciaLua: 3,
   velocidadeOrbitaLua: 0.0032,
   raioTerra: 1.6,
   segmentosTerra: 64,
-  raioLua: 0.45,
+  raioLua: 0.35,
   segmentosLua: 32,
   rugosidadeTerra: 0.85,
   metalicidadeTerra: 0.0,
