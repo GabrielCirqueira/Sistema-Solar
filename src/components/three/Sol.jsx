@@ -14,12 +14,11 @@ function usarTexturaBrilhoRadial() {
     const cx = tamanho / 2;
     const cy = tamanho / 2;
     const r = tamanho / 2;
-    const gradiente = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-    gradiente.addColorStop(0.0, "rgba(253, 233, 173, 1)");
-    gradiente.addColorStop(0.4, "rgba(255,180,60,0.65)");
-    gradiente.addColorStop(0.75, "rgba(255,140,30,0.25)");
-    gradiente.addColorStop(1.0, "rgba(255,120,0,0.0)");
-    ctx.fillStyle = gradiente;
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    g.addColorStop(0.0, "rgba(255,255,255,1)");
+    g.addColorStop(0.5, "rgba(255,255,255,0.5)");
+    g.addColorStop(1.0, "rgba(255,255,255,0)");
+    ctx.fillStyle = g;
     ctx.fillRect(0, 0, tamanho, tamanho);
     const textura = new THREE.CanvasTexture(canvas);
     textura.colorSpace = THREE.SRGBColorSpace;
@@ -52,39 +51,42 @@ export default function Sol({ referenciaAlvo }) {
     <group position={configSol.posicao}>
       <mesh ref={referenciaMalhaSol}>
         <sphereGeometry args={[2, 64, 64]} />
-        <meshBasicMaterial color="#f8e9c4ff" toneMapped={false} />
+        <meshBasicMaterial color={configSol.corNucleo} toneMapped={false} />
       </mesh>
 
-      <sprite scale={[configSol.escalaBrilho1, configSol.escalaBrilho1, 1]}>
+      <sprite scale={[configSol.haloEscalas[0], configSol.haloEscalas[0], 1]}>
         <spriteMaterial
           map={texturaBrilho}
           transparent
-          opacity={1}
+          opacity={configSol.haloOpacidades[0]}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           toneMapped={false}
+          color={configSol.corHalo}
         />
       </sprite>
 
-      <sprite scale={[configSol.escalaBrilho2, configSol.escalaBrilho2, 2]}>
+      <sprite scale={[configSol.haloEscalas[1], configSol.haloEscalas[1], 1]}>
         <spriteMaterial
           map={texturaBrilho}
           transparent
-          opacity={0.2}
+          opacity={configSol.haloOpacidades[1]}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           toneMapped={false}
+          color={configSol.corHalo}
         />
       </sprite>
 
-      <sprite scale={[configSol.escalaBrilho3, configSol.escalaBrilho3, 3]}>
+      <sprite scale={[configSol.haloEscalas[2], configSol.haloEscalas[2], 1]}>
         <spriteMaterial
           map={texturaBrilho}
-          opacity={0.15}
           transparent
+          opacity={configSol.haloOpacidades[2]}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           toneMapped={false}
+          color={configSol.corHalo}
         />
       </sprite>
 

@@ -5,6 +5,7 @@ import * as THREE from "three";
 import TerraLua from "@src/components/three/TerraLua.jsx";
 import Marte from "@src/components/three/Marte.jsx";
 import Sol from "@src/components/three/Sol.jsx";
+import FundoEstrelado from "@src/components/three/FundoEstrelado.jsx";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { camera, exibicao, luzAmbiente, estrelas, posProcessamento } from "@src/configuracoes/config";
 
@@ -36,6 +37,7 @@ export default function App() {
 
       <OrbitControls ref={referenciaControles} makeDefault enableDamping />
 
+      <FundoEstrelado />
       <Stars radius={estrelas.raio} depth={estrelas.profundidade} count={estrelas.quantidade} factor={estrelas.fator} saturation={estrelas.saturacao} fade={estrelas.esmaecer} />
 
       <Sol referenciaAlvo={referenciaTerra} />

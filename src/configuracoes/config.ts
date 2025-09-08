@@ -25,6 +25,30 @@ export interface ConfigEstrelas {
   esmaecer: boolean
 }
 
+export interface ConfigFundoEstrelado {
+  tamanhos: number[]
+  cores: string[]
+  quantidadePorTamanho: number
+  opacidadeBase: number
+  desvioOpacidade: number
+  raio: number
+}
+
+export interface ConfigFundoEstreladoBrilhantes {
+  quantidade: number
+  escalas: [number, number, number]
+  opacidades: [number, number, number]
+}
+
+export interface ConfigEstrelasVariadas {
+  tamanhos: number[]
+  cores: string[]
+  quantidadePorTamanho: number
+  raio: number
+  profundidade: number
+  opacidade: number
+}
+
 export interface ConfigSombrasDirecional {
   larguraMapa: number
   alturaMapa: number
@@ -39,9 +63,10 @@ export interface ConfigSombrasDirecional {
 export interface ConfigSol {
   posicao: [number, number, number]
   intensidade: number
-  escalaBrilho1: number
-  escalaBrilho2: number
-  escalaBrilho3: number
+  haloEscalas: [number, number, number]
+  haloOpacidades: [number, number, number]
+  corNucleo: string
+  corHalo: string
   sombras: ConfigSombrasDirecional
   tamanhoTexturaBrilho?: number
 }
@@ -85,12 +110,12 @@ export interface ConfigPosProcessamento {
 export const camera: ConfigCamera = {
   posicao: [0, 150, 0],
   campoDeVisao: 55,
-  planoProximo: 10.1,
-  planoDistante: 1500,
+  planoProximo: 0.1,
+  planoDistante: 5000,
 }
 
 export const exibicao: ConfigExibicao = {
-  densidadePixels: [0.3, 21],
+  densidadePixels: [1, 2],
   corFundo: 'black',
   antiSerrilhado: true,
   exposicaoTomAces: 1.35,
@@ -103,18 +128,41 @@ export const luzAmbiente: ConfigLuzAmbiente = {
 export const estrelas: ConfigEstrelas = {
   raio: 180,
   profundidade: 90,
-  quantidade: 18000,
+  quantidade: 8000,
   fator: 4,
-  saturacao: 10,
+  saturacao: 0,
   esmaecer: true,
+}
+
+export const fundoEstrelado: ConfigFundoEstrelado = {
+  tamanhos: [0.1, 0.1, 0.1],
+  cores: [
+    "#f0f8ff", "#e6f2ff", "#d4edff", "#c1e3ff",
+    "#9fd3ff", "#8ce6ff", "#7effb0", "#7ac3ff",
+    "#ff9b7a", "#ff7e7e", "#fff0e6", "#e6fffa",
+    "#f5f0ff", "#ffe6f2", "#f0ffe6", "#ffffe6",
+    "#e6f7ff", "#f9f2ff", "#fff2e6", "#e6fff0",
+    "#f0e6ff", "#ffe6e6", "#e6ffe6", "#fffff0"
+  ],
+  quantidadePorTamanho: 600,
+  opacidadeBase: 0.35,
+  desvioOpacidade: 0.1,
+  raio: 1200,
+}
+
+export const fundoEstreladoBrilhantes: ConfigFundoEstreladoBrilhantes = {
+  quantidade: 20,
+  escalas: [1.0, 2.0, 9.0],
+  opacidades: [231.0, 10.5, 10.28],
 }
 
 export const sol: ConfigSol = {
   posicao: [0, 0, 0],
   intensidade: 7,
-  escalaBrilho1: 5,
-  escalaBrilho2: 6,
-  escalaBrilho3: 8,
+  haloEscalas: [4, 7, 11],
+  haloOpacidades: [41.0, 10.5, 20.28],
+  corNucleo: '#ffd59a',
+  corHalo: '#ffca7bff',
   sombras: {
     larguraMapa: 2048,
     alturaMapa: 2048,
