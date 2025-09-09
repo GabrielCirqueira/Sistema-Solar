@@ -74,9 +74,13 @@ export default function FundoEstrelado() {
   const nuvens = useMemo(() => {
     const resultado = [];
     const raio = cfg.raio;
-    const paletaPesada = [cfg.cores[0], cfg.cores[0], cfg.cores[1], cfg.cores[1], cfg.cores[2], cfg.cores[3], cfg.cores[3], cfg.cores[4], cfg.cores[5]];
-    cfg.tamanhos.forEach((tamanho) => {
-      const total = cfg.quantidadePorTamanho;
+    const paleta = cfg.cores;
+    cfg.tamanhos.forEach((tamanho, idx) => {
+      const base = cfg.quantidadePorTamanho;
+      const dec = cfg.fatorDecaimentoQuantidade ?? 1.0;
+      const total = (cfg.quantidadesPorTamanho && cfg.quantidadesPorTamanho[idx] != null)
+        ? cfg.quantidadesPorTamanho[idx]
+        : Math.max(1, Math.floor(base * Math.pow(dec, idx)));
       const positions = new Float32Array(total * 3);
       const colors = new Float32Array(total * 3);
       for (let i = 0; i < total; i++) {
@@ -84,7 +88,7 @@ export default function FundoEstrelado() {
         positions[i * 3 + 0] = x;
         positions[i * 3 + 1] = y;
         positions[i * 3 + 2] = z;
-        const cor = paletaPesada[Math.floor(Math.random() * paletaPesada.length)];
+        const cor = paleta[Math.floor(Math.random() * paleta.length)] || '#ffffff';
         const [r, g, b] = corHexParaRgb(cor);
         colors[i * 3 + 0] = r;
         colors[i * 3 + 1] = g;
@@ -93,15 +97,16 @@ export default function FundoEstrelado() {
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
       geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+      const op = Math.max(0, Math.min(1, (cfg.opacidadeBase ?? 0.4) + ((Math.random() * 2 - 1) * (cfg.desvioOpacidade ?? 0))))
       const mat = new THREE.PointsMaterial({
         size: tamanho,
         map: mapa,
         transparent: true,
-        opacity: cfg.opacidadeBase,
+        opacity: op,
         depthWrite: false,
         vertexColors: true,
         blending: THREE.AdditiveBlending,
-        sizeAttenuation: true,
+        sizeAttenuation: false,
       });
       resultado.push({ geo, mat });
     });
@@ -111,7 +116,7 @@ export default function FundoEstrelado() {
   const estrelasBrilhantes = useMemo(() => {
     const lista = [];
     const raio = cfg.raio;
-    const paleta = [cfg.cores[0], cfg.cores[0], cfg.cores[1], cfg.cores[1], cfg.cores[2], cfg.cores[3]];
+    const paleta = cfg.cores;
     for (let i = 0; i < cfgBrilho.quantidade; i++) {
       const [x, y, z] = posicaoAleatoriaEmCasca(raio);
       const cor = paleta[Math.floor(Math.random() * paleta.length)] || '#ffffff';

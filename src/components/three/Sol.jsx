@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, forwardRef, useImperativeHandle } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { sol as configSol } from "@src/configuracoes/config";
@@ -29,12 +29,14 @@ function usarTexturaBrilhoRadial() {
   }, []);
 }
 
-export default function Sol() {
+const Sol = forwardRef(function Sol(_, ref) {
   const { scene } = useThree();
   const referenciaLuzPonto = useRef(null);
   const referenciaMalhaSol = useRef(null);
   const vetorTemporario = useMemo(() => new THREE.Vector3(), []);
   const texturaBrilho = usarTexturaBrilhoRadial();
+
+  useImperativeHandle(ref, () => referenciaMalhaSol.current);
 
   return (
     <group position={configSol.posicao}>
@@ -83,10 +85,13 @@ export default function Sol() {
         ref={referenciaLuzPonto}
         position={[0, 0, 0]}
         intensity={configSol.intensidade}
+        color={configSol.corLuz || configSol.corHalo}
         distance={0}
         decay={0}
         castShadow={false}
       />
     </group>
   );
-}
+});
+
+export default Sol;

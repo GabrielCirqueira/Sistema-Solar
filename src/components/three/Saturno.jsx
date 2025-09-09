@@ -2,10 +2,19 @@ import { forwardRef, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
-import { saturno as cfg } from "@src/configuracoes/config";
+import { saturno as cfg, sol as cfgSol } from "@src/configuracoes/config";
 
 const Saturno = forwardRef(function Saturno(_, referenciaPlaneta) {
   const referenciaOrbita = useRef();
+  const referenciaCentro = useRef();
+  const materiaisRef = useRef([]);
+  const uniformesAneis = useMemo(() => ({
+    uSunPosition: { value: new THREE.Vector3(...cfgSol.posicao) },
+    uRingCenter: { value: new THREE.Vector3() },
+    uBright: { value: cfg.aneisBrilhoLadoClaro ?? 1.3 },
+    uDark: { value: cfg.aneisBrilhoLadoEscuro ?? 0.95 },
+    uOpacityMul: { value: cfg.aneisOpacidadeMultiplicador ?? 1.0 },
+  }), []);
 
   const base = import.meta.env.BASE_URL || "/";
   const [textura] = useTexture([`${base}textures/planetas/saturno.jpg`]);
@@ -47,11 +56,17 @@ const Saturno = forwardRef(function Saturno(_, referenciaPlaneta) {
   useFrame(() => {
     if (referenciaPlaneta?.current) referenciaPlaneta.current.rotation.y += cfg.velocidadeRotacaoSaturno;
     if (referenciaOrbita.current) referenciaOrbita.current.rotation.y += cfg.velocidadeOrbitaSaturno;
+    if (referenciaCentro.current) {
+      referenciaCentro.current.updateWorldMatrix(true, false);
+      const pos = new THREE.Vector3();
+      referenciaCentro.current.getWorldPosition(pos);
+      uniformesAneis.uRingCenter.value.copy(pos);
+    }
   });
 
   return (
     <group ref={referenciaOrbita} rotation={[0, cfg.faseInicial || 0, 0]}>
-      <group position={[cfg.raioOrbita, 0, 0]}>
+      <group ref={referenciaCentro} position={[cfg.raioOrbita, 0, 0]}>
         <group rotation={[cfg.aneisInclinacaoRad ?? 0.2, 0, 0]}>
           <mesh ref={referenciaPlaneta} castShadow receiveShadow>
             <sphereGeometry args={[cfg.raioSaturno, cfg.segmentosSaturno, cfg.segmentosSaturno]} />
@@ -100,6 +115,38 @@ const Saturno = forwardRef(function Saturno(_, referenciaPlaneta) {
                     opacity={r.opacity}
                     side={THREE.DoubleSide}
                     alphaMap={texturaAneis || undefined}
+                    onBeforeCompile={(shader) => {
+                      shader.uniforms.uSunPosition = uniformesAneis.uSunPosition;
+                      shader.uniforms.uRingCenter = uniformesAneis.uRingCenter;
+                      shader.uniforms.uBright = uniformesAneis.uBright;
+                      shader.uniforms.uDark = uniformesAneis.uDark;
+                      shader.uniforms.uOpacityMul = uniformesAneis.uOpacityMul;
+                      shader.vertexShader = shader.vertexShader.replace(
+                        '#include <common>',
+                        '#include <common>\n varying vec3 vWorldPosition;'
+                      );
+                      shader.vertexShader = shader.vertexShader.replace(
+                        '#include <project_vertex>',
+                        '#include <project_vertex>\n vWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;'
+                      );
+                      shader.fragmentShader = shader.fragmentShader.replace(
+                        '#include <common>',
+                        '#include <common>\n varying vec3 vWorldPosition;\n uniform vec3 uSunPosition;\n uniform vec3 uRingCenter;\n uniform float uBright;\n uniform float uDark;\n uniform float uOpacityMul;'
+                      );
+                      shader.fragmentShader = shader.fragmentShader.replace(
+                        'gl_FragColor = vec4( outgoingLight, diffuseColor.a );',
+                        `gl_FragColor = vec4( outgoingLight, diffuseColor.a );
+                         {
+                           vec3 toSun = normalize(uSunPosition - vWorldPosition);
+                           vec3 toCenter = normalize(uRingCenter - vWorldPosition);
+                           float side = clamp(dot(toSun, -toCenter), 0.0, 1.0);
+                           float bright = mix(uDark, uBright, side);
+                           gl_FragColor.rgb *= bright;
+                           gl_FragColor.a *= uOpacityMul;
+                         }`
+                      );
+                    }}
+                    ref={(m) => { if (m && !materiaisRef.current.includes(m)) materiaisRef.current.push(m); }}
                   />
                 </mesh>
               ));

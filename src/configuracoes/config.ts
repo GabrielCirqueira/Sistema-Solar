@@ -14,6 +14,7 @@ export interface ConfigExibicao {
 
 export interface ConfigLuzAmbiente {
   intensidade: number
+  cor?: string
 }
 
 export interface ConfigEstrelas {
@@ -29,6 +30,8 @@ export interface ConfigFundoEstrelado {
   tamanhos: number[]
   cores: string[]
   quantidadePorTamanho: number
+  quantidadesPorTamanho?: number[]
+  fatorDecaimentoQuantidade?: number
   opacidadeBase: number
   desvioOpacidade: number
   raio: number
@@ -73,6 +76,7 @@ export interface ConfigSol {
   sombras: ConfigSombrasDirecional
   tamanhoTexturaBrilho?: number
   segmentosSol?: number
+  corLuz?: string
 }
 
 export interface ConfigTerraLua {
@@ -168,6 +172,9 @@ export interface ConfigSaturno {
   aneisCorSaturacao?: number
   aneisCorLumInicial?: number
   aneisCorLumPasso?: number
+  aneisBrilhoLadoClaro?: number
+  aneisBrilhoLadoEscuro?: number
+  aneisOpacidadeMultiplicador?: number
 }
 
 export interface ConfigUrano {
@@ -200,6 +207,15 @@ export interface ConfigBloom {
 
 export interface ConfigPosProcessamento {
   bloom: ConfigBloom
+  godRays?: {
+    habilitado: boolean
+    samples: number
+    density: number
+    decay: number
+    weight: number
+    exposure: number
+    clampMax: number
+  }
 }
 
 export interface ConfigControlesOrbita {
@@ -230,7 +246,8 @@ export const exibicao: ConfigExibicao = {
 }
 
 export const luzAmbiente: ConfigLuzAmbiente = {
-  intensidade: 0.2,
+  intensidade: 0.58,
+  cor: '#404040',
 }
 
 export const estrelas: ConfigEstrelas = {
@@ -243,37 +260,38 @@ export const estrelas: ConfigEstrelas = {
 }
 
 export const fundoEstrelado: ConfigFundoEstrelado = {
-  tamanhos: [1.1, 0.1, 0.1],
+  tamanhos: [1.18, 1.5, 0.34, 0.48, 0.7],
   cores: [
-    "#f0f8ff", "#e6f2ff", "#d4edff", "#c1e3ff",
-    "#9fd3ff", "#8ce6ff", "#7effb0", "#7ac3ff",
-    "#ff9b7a", "#ff7e7e", "#fff0e6", "#e6fffa",
-    "#f5f0ff", "#ffe6f2", "#f0ffe6", "#ffffe6",
-    "#e6f7ff", "#f9f2ff", "#fff2e6", "#e6fff0",
-    "#f0e6ff", "#ffe6e6", "#e6ffe6", "#fffff0"
+    '#ffffff', '#f8fbff', '#eef7ff', '#e1f0ff',
+    '#fff2cc', '#ffe8a3', '#ffd27a', '#ffbf5f',
+    '#cfe9ff', '#a6d8ff', '#7fc8ff', '#45b3ff',
+    '#ffd6e7', '#ffb3c7', '#ff8aa3', '#ff6b6b',
+    '#e3ffd6', '#b9ff9c', '#8cff66', '#5fe08c'
   ],
-  quantidadePorTamanho: 600,
-  opacidadeBase: 0.35,
+  quantidadePorTamanho: 22000,
+  quantidadesPorTamanho: [12000, 8000, 4000, 1500, 500],
+  fatorDecaimentoQuantidade: 0.6,
+  opacidadeBase: 0.55,
   desvioOpacidade: 0.1,
   raio: 5000,
   tamanhoTexturaPontos: 64,
 }
 
 export const fundoEstreladoBrilhantes: ConfigFundoEstreladoBrilhantes = {
-  quantidade: 9230,
-  escalas: [0.2, 2.0, 3.0, 4.0, 5.0, 15.0],
-  opacidades: [31.0, 10.5, 20.28, 40.0, 60.0, 100.0],
+  quantidade: 21600,
+  escalas: [1.0, 1.8, 3.0],
+  opacidades: [0.85, 0.32, 0.1],
   tamanhoTexturaHalo: 128,
 }
 
 export const sol: ConfigSol = {
   posicao: [0, 0, 0],
-  intensidade: 4,
+  intensidade: 5,
   raio: 5,
-  haloEscalas: [6, 9, 12],
-  haloOpacidades: [1.0, 20.5, 30.28],
-  corNucleo: '#ffffffff',
-  corHalo: '#e78b00ff',
+  haloEscalas: [8, 14, 22],
+  haloOpacidades: [1.0, 0.35, 0.12],
+  corNucleo: '#ffffff',
+  corHalo: '#ffe2a8',
   sombras: {
     larguraMapa: 2048,
     alturaMapa: 2048,
@@ -286,6 +304,7 @@ export const sol: ConfigSol = {
   },
   tamanhoTexturaBrilho: 256,
   segmentosSol: 64,
+  corLuz: '#fff2cc',
 }
 
 export const terraLua: ConfigTerraLua = {
@@ -364,7 +383,7 @@ export const saturno: ConfigSaturno = {
   rugosidadeSaturno: 0.85,
   metalicidadeSaturno: 0.0,
   faseInicial: 2.7,
-  aneisQuantidade: 298,
+  aneisQuantidade: 360,
   aneisSegmentosCircunferencia: 180,
   aneisRaioInternoMult: 1.22,
   aneisRaioExternoMult: 2.35,
@@ -377,15 +396,18 @@ export const saturno: ConfigSaturno = {
   aneisEspacamentoBase: 0.008,
   aneisEspacamentoMultiplo: 0.02,
   aneisEspacamentoDivisor: 120,
-  aneisOpacidadeBase: 0.12,
-  aneisOpacidadeOscAmp: 0.5,
+  aneisOpacidadeBase: 0.2,
+  aneisOpacidadeOscAmp: 0.7,
   aneisOpacidadeOscFreq: 0.41,
   aneisOpacidadeOscPhase: 0.3,
   aneisCorHueInicial: 0.12,
   aneisCorHuePasso: 0.0015,
   aneisCorSaturacao: 0.32,
-  aneisCorLumInicial: 10.78,
-  aneisCorLumPasso: 0.004,
+  aneisCorLumInicial: 0.82,
+  aneisCorLumPasso: 0.0025,
+  aneisBrilhoLadoClaro: 1.4,
+  aneisBrilhoLadoEscuro: 0.95,
+  aneisOpacidadeMultiplicador: 1.15,
 }
 
 export const urano: ConfigUrano = {
@@ -415,6 +437,15 @@ export const posProcessamento: ConfigPosProcessamento = {
     intensidade: 0.9,
     limiarLuminancia: 0.6,
     suavizacaoLuminancia: 0.2,
+  },
+  godRays: {
+    habilitado: true,
+    samples: 150,
+    density: 0.985,
+    decay: 0.965,
+    weight: 0.65,
+    exposure: 0.26,
+    clampMax: 1.0,
   },
 }
 
