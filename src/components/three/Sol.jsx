@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useThree, useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { sol as configSol } from "@src/configuracoes/config";
 
@@ -29,28 +29,17 @@ function usarTexturaBrilhoRadial() {
   }, []);
 }
 
-export default function Sol({ referenciaAlvo }) {
+export default function Sol() {
   const { scene } = useThree();
-  const referenciaLuzDirecional = useRef(null);
+  const referenciaLuzPonto = useRef(null);
   const referenciaMalhaSol = useRef(null);
   const vetorTemporario = useMemo(() => new THREE.Vector3(), []);
   const texturaBrilho = usarTexturaBrilhoRadial();
 
-  useEffect(() => {
-    if (referenciaLuzDirecional.current) scene.add(referenciaLuzDirecional.current.target);
-  }, [scene]);
-
-  useFrame(() => {
-    if (!referenciaLuzDirecional.current || !referenciaAlvo?.current) return;
-    referenciaAlvo.current.getWorldPosition(vetorTemporario);
-    referenciaLuzDirecional.current.target.position.copy(vetorTemporario);
-    referenciaLuzDirecional.current.target.updateMatrixWorld();
-  });
-
   return (
     <group position={configSol.posicao}>
       <mesh ref={referenciaMalhaSol}>
-        <sphereGeometry args={[2, 64, 64]} />
+        <sphereGeometry args={[configSol.raio, configSol.segmentosSol ?? 64, configSol.segmentosSol ?? 64]} />
         <meshBasicMaterial color={configSol.corNucleo} toneMapped={false} />
       </mesh>
 
@@ -90,19 +79,13 @@ export default function Sol({ referenciaAlvo }) {
         />
       </sprite>
 
-      <directionalLight
-        ref={referenciaLuzDirecional}
+      <pointLight
+        ref={referenciaLuzPonto}
         position={[0, 0, 0]}
         intensity={configSol.intensidade}
-        castShadow
-        shadow-mapSize-width={configSol.sombras.larguraMapa}
-        shadow-mapSize-height={configSol.sombras.alturaMapa}
-        shadow-camera-near={configSol.sombras.planoProximo}
-        shadow-camera-far={configSol.sombras.planoDistante}
-        shadow-camera-left={configSol.sombras.limiteEsquerda}
-        shadow-camera-right={configSol.sombras.limiteDireita}
-        shadow-camera-top={configSol.sombras.limiteTopo}
-        shadow-camera-bottom={configSol.sombras.limiteFundo}
+        distance={0}
+        decay={0}
+        castShadow={false}
       />
     </group>
   );

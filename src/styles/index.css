@@ -37,7 +37,6 @@ h1 {
   line-height: 1.1;
 }
 
-/* Painel de controles sobreposto */
 .controls-panel {
   position: fixed;
   top: 12px;

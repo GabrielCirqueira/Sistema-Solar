@@ -9,7 +9,7 @@ const Marte = forwardRef(function Marte(_, referenciaMarte) {
 
   const base = import.meta.env.BASE_URL || "/";
   const [texturaMarte] = useTexture([
-    `${base}textures/marte.jpg`,
+    `${base}textures/planetas/marte.jpg`,
   ]);
 
   texturaMarte.colorSpace = THREE.SRGBColorSpace;
@@ -20,8 +20,8 @@ const Marte = forwardRef(function Marte(_, referenciaMarte) {
   });
 
   return (
-    <group ref={referenciaOrbitaMarte}>
-      <group position={[cfg.raioOrbita, 0, 50]}>
+    <group ref={referenciaOrbitaMarte} rotation={[0, cfg.faseInicial || 0, 0]}>
+      <group position={[cfg.raioOrbita, 0, 0]}>
         <mesh ref={referenciaMarte} castShadow receiveShadow>
           <sphereGeometry args={[cfg.raioMarte, cfg.segmentosMarte, cfg.segmentosMarte]} />
           <meshStandardMaterial map={texturaMarte} roughness={cfg.rugosidadeMarte} metalness={cfg.metalicidadeMarte} />

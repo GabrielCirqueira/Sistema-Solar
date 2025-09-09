@@ -3,8 +3,7 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { fundoEstrelado as cfg, fundoEstreladoBrilhantes as cfgBrilho } from "@src/configuracoes/config";
 
-function criarTexturaPonto() {
-  const tamanho = 64;
+function criarTexturaPonto(tamanho = 64) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = tamanho;
   const ctx = canvas.getContext("2d");
@@ -48,9 +47,9 @@ function corHexParaRgb(hex) {
 
 export default function FundoEstrelado() {
   const grupoRef = useRef();
-  const mapa = useMemo(() => criarTexturaPonto(), []);
+  const mapa = useMemo(() => criarTexturaPonto(cfg.tamanhoTexturaPontos ?? 64), [cfg.tamanhoTexturaPontos]);
   const texturaHalo = useMemo(() => {
-    const tamanho = 128;
+    const tamanho = cfgBrilho.tamanhoTexturaHalo ?? 128;
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = tamanho;
     const ctx = canvas.getContext('2d');
