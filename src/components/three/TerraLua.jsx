@@ -26,10 +26,12 @@ const TerraLua = forwardRef(function TerraLua(_, referenciaTerra) {
   return (
     <group ref={referenciaOrbitaTerra} rotation={[0, cfg.faseInicial || 0, 0]}>
       <group position={[cfg.raioOrbita, 0, 0]}>
-        <mesh ref={referenciaTerra} castShadow receiveShadow>
+        <group rotation={[0, 0, THREE.MathUtils.degToRad(cfg.inclinacaoGraus || 0)]}>
+          <mesh ref={referenciaTerra} castShadow receiveShadow>
           <sphereGeometry args={[cfg.raioTerra, cfg.segmentosTerra, cfg.segmentosTerra]} />
           <meshStandardMaterial map={texturaTerra} roughness={cfg.rugosidadeTerra} metalness={cfg.metalicidadeTerra} />
-        </mesh>
+          </mesh>
+        </group>
 
         <group ref={referenciaOrbitaLua} rotation={[THREE.MathUtils.degToRad(cfg.inclinacaoOrbitaLuaGraus ?? 5.145), 0, 0]}>
           <mesh position={[cfg.distanciaLua, 0, 0]} castShadow receiveShadow>

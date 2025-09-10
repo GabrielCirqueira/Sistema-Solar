@@ -19,10 +19,12 @@ const Mercurio = forwardRef(function Mercurio(_, referenciaPlaneta) {
   return (
     <group ref={referenciaOrbita} rotation={[0, cfg.faseInicial || 0, 0]}>
       <group position={[cfg.raioOrbita, 0, 0]}>
-        <mesh ref={referenciaPlaneta} castShadow receiveShadow>
+        <group rotation={[0, 0, THREE.MathUtils.degToRad(cfg.inclinacaoGraus || 0)]}>
+          <mesh ref={referenciaPlaneta} castShadow receiveShadow>
           <sphereGeometry args={[cfg.raioMercurio, cfg.segmentosMercurio, cfg.segmentosMercurio]} />
           <meshStandardMaterial map={textura} roughness={cfg.rugosidadeMercurio} metalness={cfg.metalicidadeMercurio} />
-        </mesh>
+          </mesh>
+        </group>
       </group>
     </group>
   );

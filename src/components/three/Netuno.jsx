@@ -19,10 +19,12 @@ const Netuno = forwardRef(function Netuno(_, referenciaPlaneta) {
   return (
     <group ref={referenciaOrbita} rotation={[0, cfg.faseInicial || 0, 0]}>
       <group position={[cfg.raioOrbita, 0, 0]}>
-        <mesh ref={referenciaPlaneta} castShadow receiveShadow>
+        <group rotation={[0, 0, THREE.MathUtils.degToRad(cfg.inclinacaoGraus || 0)]}>
+          <mesh ref={referenciaPlaneta} castShadow receiveShadow>
           <sphereGeometry args={[cfg.raioNetuno, cfg.segmentosNetuno, cfg.segmentosNetuno]} />
           <meshStandardMaterial map={textura} roughness={cfg.rugosidadeNetuno} metalness={cfg.metalicidadeNetuno} />
-        </mesh>
+          </mesh>
+        </group>
       </group>
     </group>
   );

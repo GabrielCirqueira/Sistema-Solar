@@ -22,10 +22,12 @@ const Marte = forwardRef(function Marte(_, referenciaMarte) {
   return (
     <group ref={referenciaOrbitaMarte} rotation={[0, cfg.faseInicial || 0, 0]}>
       <group position={[cfg.raioOrbita, 0, 0]}>
-        <mesh ref={referenciaMarte} castShadow receiveShadow>
+        <group rotation={[0, 0, THREE.MathUtils.degToRad(cfg.inclinacaoGraus || 0)]}>
+          <mesh ref={referenciaMarte} castShadow receiveShadow>
           <sphereGeometry args={[cfg.raioMarte, cfg.segmentosMarte, cfg.segmentosMarte]} />
           <meshStandardMaterial map={texturaMarte} roughness={cfg.rugosidadeMarte} metalness={cfg.metalicidadeMarte} />
-        </mesh>
+          </mesh>
+        </group>
       </group>
     </group>
   );

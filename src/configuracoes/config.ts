@@ -95,6 +95,7 @@ export interface ConfigTerraLua {
   metalicidadeLua: number
   faseInicial?: number
   inclinacaoOrbitaLuaGraus?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigMarte {
@@ -106,6 +107,7 @@ export interface ConfigMarte {
   rugosidadeMarte: number
   metalicidadeMarte: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigMercurio {
@@ -117,6 +119,7 @@ export interface ConfigMercurio {
   rugosidadeMercurio: number
   metalicidadeMercurio: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigVenus {
@@ -128,6 +131,7 @@ export interface ConfigVenus {
   rugosidadeVenus: number
   metalicidadeVenus: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigJupiter {
@@ -139,6 +143,7 @@ export interface ConfigJupiter {
   rugosidadeJupiter: number
   metalicidadeJupiter: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigSaturno {
@@ -150,6 +155,7 @@ export interface ConfigSaturno {
   rugosidadeSaturno: number
   metalicidadeSaturno: number
   faseInicial?: number
+  inclinacaoGraus?: number
   aneisQuantidade?: number
   aneisSegmentosCircunferencia?: number
   aneisRaioInternoMult?: number
@@ -175,6 +181,9 @@ export interface ConfigSaturno {
   aneisBrilhoLadoClaro?: number
   aneisBrilhoLadoEscuro?: number
   aneisOpacidadeMultiplicador?: number
+  aneisCorGlobal?: string
+  aneisGanhoLuz?: number
+  aneisIluminacaoMinima?: number
 }
 
 export interface ConfigUrano {
@@ -186,6 +195,7 @@ export interface ConfigUrano {
   rugosidadeUrano: number
   metalicidadeUrano: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigNetuno {
@@ -197,6 +207,7 @@ export interface ConfigNetuno {
   rugosidadeNetuno: number
   metalicidadeNetuno: number
   faseInicial?: number
+  inclinacaoGraus?: number
 }
 
 export interface ConfigBloom {
@@ -323,6 +334,7 @@ export const terraLua: ConfigTerraLua = {
   metalicidadeLua: 0.0,
   faseInicial: 2.1,
   inclinacaoOrbitaLuaGraus: 5.145,
+  inclinacaoGraus: 23.44,
 }
 
 export const marte: ConfigMarte = {
@@ -350,6 +362,7 @@ export const mercurio: ConfigMercurio = {
   rugosidadeMercurio: 0.9,
   metalicidadeMercurio: 0.0,
   faseInicial: 0.1,
+  inclinacaoGraus: 0.03,
 }
 
 export const venus: ConfigVenus = {
@@ -361,6 +374,7 @@ export const venus: ConfigVenus = {
   rugosidadeVenus: 0.85,
   metalicidadeVenus: 0.0,
   faseInicial: 1.3,
+  inclinacaoGraus: 177.36,
 }
 
 export const jupiter: ConfigJupiter = {
@@ -372,6 +386,7 @@ export const jupiter: ConfigJupiter = {
   rugosidadeJupiter: 0.8,
   metalicidadeJupiter: 0.0,
   faseInicial: 0.6,
+  inclinacaoGraus: 3.13,
 }
 
 export const saturno: ConfigSaturno = {
@@ -383,31 +398,41 @@ export const saturno: ConfigSaturno = {
   rugosidadeSaturno: 0.85,
   metalicidadeSaturno: 0.0,
   faseInicial: 2.7,
-  aneisQuantidade: 360,
-  aneisSegmentosCircunferencia: 180,
-  aneisRaioInternoMult: 1.22,
-  aneisRaioExternoMult: 2.35,
-  aneisInclinacaoRad: 0.2,
-  aneisTexturaLargura: 1024,
-  aneisTexturaAltura: 6,
-  aneisLarguraBase: 0.5,
-  aneisLarguraOscilacao: 0.15,
-  aneisLarguraDivisor: 80,
-  aneisEspacamentoBase: 0.008,
-  aneisEspacamentoMultiplo: 0.02,
-  aneisEspacamentoDivisor: 120,
-  aneisOpacidadeBase: 0.2,
-  aneisOpacidadeOscAmp: 0.7,
-  aneisOpacidadeOscFreq: 0.41,
-  aneisOpacidadeOscPhase: 0.3,
-  aneisCorHueInicial: 0.12,
-  aneisCorHuePasso: 0.0015,
-  aneisCorSaturacao: 0.32,
-  aneisCorLumInicial: 0.82,
-  aneisCorLumPasso: 0.0025,
-  aneisBrilhoLadoClaro: 1.4,
-  aneisBrilhoLadoEscuro: 0.95,
-  aneisOpacidadeMultiplicador: 1.15,
+  inclinacaoGraus: 16.73,
+  aneisSegmentosCircunferencia: 256,
+  aneisTexturaLargura: 2048,
+  aneisTexturaAltura: 8,
+
+  aneisRaioInternoMult: 1.11,
+  aneisRaioExternoMult: 2.30,
+
+  aneisQuantidade: 2200,
+  aneisLarguraBase: 12.16,
+  aneisLarguraOscilacao: 0.0025,
+  aneisLarguraDivisor: 240,
+  aneisEspacamentoBase: 0.004,
+  aneisEspacamentoMultiplo: 0.01,
+  aneisEspacamentoDivisor: 150,
+
+  aneisOpacidadeBase: 0.03,
+  aneisOpacidadeOscAmp: 0.55,
+  aneisOpacidadeOscFreq: 1.6,
+  aneisOpacidadeOscPhase: 0.0,
+
+  aneisCorHueInicial: 0.11,
+  aneisCorHuePasso: 0.0,
+  aneisCorSaturacao: 0.22,
+  aneisCorLumInicial: 0.86,
+  aneisCorLumPasso: 0.0,
+
+  aneisBrilhoLadoClaro: 1.35,
+  aneisBrilhoLadoEscuro: 0.06,
+  aneisOpacidadeMultiplicador: 1.0,
+
+  aneisCorGlobal: 'auto',
+
+  aneisGanhoLuz: 0.2,
+  aneisIluminacaoMinima: 0.08,
 }
 
 export const urano: ConfigUrano = {
@@ -419,6 +444,7 @@ export const urano: ConfigUrano = {
   rugosidadeUrano: 0.85,
   metalicidadeUrano: 0.0,
   faseInicial: 1.9,
+  inclinacaoGraus: 97.77,
 }
 
 export const netuno: ConfigNetuno = {
@@ -430,6 +456,7 @@ export const netuno: ConfigNetuno = {
   rugosidadeNetuno: 0.85,
   metalicidadeNetuno: 0.0,
   faseInicial: 4.0,
+  inclinacaoGraus: 28.32,
 }
 
 export const posProcessamento: ConfigPosProcessamento = {
